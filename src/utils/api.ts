@@ -1,6 +1,6 @@
 export class api {
 
-  static _url: string = "http://localhost:9001";
+  static _url: string = "https://issy.edgar-lecomte.fr";
 
   static async getDatasets() {
     const res = await fetch(`${this._url}/dataset`);

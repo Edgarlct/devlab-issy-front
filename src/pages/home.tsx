@@ -1,15 +1,15 @@
 import {useEffect, useState} from 'react'
 import '../App.css'
-import {Chat} from "@mui/icons-material";
 import {api} from "../utils/api.ts";
 import {Button} from "@mui/material";
 import {LinkGenerator} from "../utils/linkGenerator.ts";
+import ChatContainer from "../ChatContainer.tsx";
 
 function Home() {
-  const [open, setOpen] = useState(false)
   const [dataset, setDataset] = useState([])
   const [datasetKey, setDatasetKey] = useState({})
   const [filter, setFilter] = useState<Array<string|null>>([])
+  const [link, setLink] = useState("https://data.issy.com")
 
   useEffect(() => {
     loadDatasets()
@@ -34,19 +34,21 @@ function Home() {
     return (
       <div>
         <h4>List des jeux de données</h4>
-        {
-          dataset.map((dataset: {id:string, name:string}) => {
-            return (
-              <Button variant="contained" onClick={() => loadDatasetKey(dataset.id)}>{dataset.name}</Button>
-            )
-          })
-        }
+        <div style={{display: "flex", flexDirection: "column", gap: "8px"}}>
+          {
+            dataset.map((dataset : { id : string, name : string }) => {
+              return (
+                <Button variant="contained" onClick={() => loadDatasetKey(dataset.id)}>{dataset.name}</Button>
+              )
+            })
+          }
+        </div>
       </div>
     )
   }
 
   const renderDatasetKey = () => {
-    let filterKey: string[] = [];
+    let filterKey : string[] = [];
     if (filter.length === 0) {
       filterKey = Object.keys((datasetKey as {keyValues: object}).keyValues)
     } else if (filter.length === 1) {
@@ -77,7 +79,7 @@ function Home() {
       <div className="button-container">
         <h4>Voici le lien vers le jeu de données filtrée</h4>
         <p>Filtres : {filter.join(" ; ")}</p>
-        <a href={LinkGenerator.generateLink((datasetKey as {id: string, name: string, firstKey: string, secondKey: string}), filter)} target="_blank" rel="noreferrer">Lien Data Issy</a>
+        <span onClick={()=>setLink(LinkGenerator.generateLink((datasetKey as {id: string, name: string, firstKey: string, secondKey: string}), filter))}>Lien Data Issy</span>
         <Button variant="contained" onClick={() => reset()}>Retour</Button>
       </div>
     )
@@ -86,17 +88,8 @@ function Home() {
   return (
     <>
       <div className="container">
-        {
-          open &&
-          <div className="chat-container">
-            {dataset.length > 0 && Object.keys(datasetKey).length === 0 && renderDatasets()}
-            {Object.keys(datasetKey).length > 0 && filter.length < 2 && renderDatasetKey()}
-            {filter.length === 2 && renderLink()}
-          </div>
-        }
-        <div className="chat-button" onClick={()=>setOpen(true)}>
-          <Chat/>
-        </div>
+        <iframe title="data-issy" src={link} width="100%" height="100%" />
+        <ChatContainer linkChange={(link) => setLink(link)}/>
       </div>
     </>
   )

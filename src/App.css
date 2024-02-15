@@ -1,11 +1,5 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  text-align: center;
-}
-
 .container {
-  width: 600px;
+  width: 100vw;
   height: 100vh;
   background-color: #FFF;
   position: relative;
@@ -52,4 +46,13 @@
     align-items: center;
     gap: 8px;
     flex-direction: column;
+}
+
+.interceptor {
+    position: absolute;
+    top: 0;
+    left: 550px;
+    width: 167px;
+    height: 65px;
+    cursor: pointer;
 }
