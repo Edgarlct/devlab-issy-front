@@ -22,4 +22,14 @@ export class api {
     });
     return await res.json();
   }
+
+  static async getDatasetKeyFromUrl(url: string) {
+    const res = await fetch(`${this._url}/dataset/key?url=${url}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+    return await res.json();
+  }
 }
