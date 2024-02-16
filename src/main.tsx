@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Home from './pages/home.tsx'
+import HorizontalNonLinearStepper from './pages/admin.tsx'
 import './index.css'
 import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
@@ -23,8 +24,8 @@ const router = createBrowserRouter([
     element: <Home/>
   },
   {
-    path:'/test',
-    element: <div>test</div>
+    path:'/admin',
+    element: <HorizontalNonLinearStepper/>
   }
 ])
 
