@@ -138,7 +138,7 @@ export default function HorizontalNonLinearStepper() {
     };
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box className={"divAdmin"} sx={{ width: '100%' }}>
             <Typography variant="h3" mb="50px">
                 Ajout d'un dataset
             </Typography>
