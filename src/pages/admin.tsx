@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import {api} from "../utils/api.ts";
 import {useState} from "react";
-import {Input, InputLabel} from "@mui/material";
+import {CircularProgress, Input, InputLabel} from "@mui/material";
 
 const steps = ["URL & Nom", 'Filtre 1', 'Filtre 2'];
 
@@ -17,6 +17,8 @@ export default function HorizontalNonLinearStepper() {
     const [completed, setCompleted] = React.useState<{
         [k: number]: boolean;
     }>({});
+    const [keyValues, setKeyValues] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         url: '',
@@ -38,18 +40,40 @@ export default function HorizontalNonLinearStepper() {
         } else if (activeStep === 1) {
             return (
                 <div>
-                    <InputLabel htmlFor={"key1"}>Filtre 1</InputLabel>
-                    <Input type="text" name="key1" value={formData.key1} onChange={handleChange}/>
+                    {loading && <CircularProgress/>}
+                    {renderListKeyValues("key1")}
                 </div>
             )
         } else if (activeStep === 2) {
             return (
                 <div>
-                    <InputLabel htmlFor={"key2"}>Filtre 2</InputLabel>
-                    <Input type="text" name="key2" value={formData.key2} onChange={handleChange}/>
+                    {loading && <CircularProgress/>}
+                    {renderListKeyValues("key2")}
+                    {/*<Input type="text" name="key2" value={formData.key2} onChange={handleChange}/>*/}
                 </div>
             )
         }
+    }
+
+    const renderListKeyValues = (name:"key1" | "key2") => {
+        return (
+            <div style={{display:"flex", gap:"8px", flexWrap:"wrap"}}>
+                {keyValues
+                  .filter((key: string) => key !== formData[name])
+                  .map((key: string) => {
+                    return (
+                        <Button onClick={() => {
+                            setFormData(prevState => ({
+                                ...prevState,
+                                [name]: key
+                            }));
+                        }} variant={"outlined"} disabled={!!formData[name]}>
+                            {key}
+                        </Button>
+                    )
+                })}
+            </div>
+        )
     }
 
     const checkIfFormIsValid = () => {
@@ -124,6 +148,15 @@ export default function HorizontalNonLinearStepper() {
         }
         const newCompleted = completed;
         newCompleted[activeStep] = true;
+
+        if (activeStep === 0) {
+            setLoading(true);
+            api.getDatasetKeyFromUrl(formData.url).then((data) => {
+                setKeyValues(data);
+                setLoading(false);
+            });
+        }
+
         setCompleted(newCompleted);
         handleNext();
     };
@@ -138,7 +171,7 @@ export default function HorizontalNonLinearStepper() {
     };
 
     return (
-        <Box className={"divAdmin"} sx={{ width: '100%' }}>
+        <Box className={"divAdmin"} sx={{ width: '100%', height:'100vh', display:"flex", justifyContent:'center', flexDirection:"column" }}>
             <Typography variant="h3" mb="50px">
                 Ajout d'un dataset
             </Typography>
