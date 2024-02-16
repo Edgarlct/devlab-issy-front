@@ -10,7 +10,7 @@ import {api} from "../utils/api.ts";
 import {useState} from "react";
 import {Input, InputLabel} from "@mui/material";
 
-const steps = ["URL & Nom", 'Key1', 'Key2'];
+const steps = ["URL & Nom", 'Filtre 1', 'Filtre 2'];
 
 export default function HorizontalNonLinearStepper() {
     const [activeStep, setActiveStep] = React.useState(0);
@@ -38,14 +38,14 @@ export default function HorizontalNonLinearStepper() {
         } else if (activeStep === 1) {
             return (
                 <div>
-                    <InputLabel htmlFor={"key1"}>Key1</InputLabel>
+                    <InputLabel htmlFor={"key1"}>Filtre 1</InputLabel>
                     <Input type="text" name="key1" value={formData.key1} onChange={handleChange}/>
                 </div>
             )
         } else if (activeStep === 2) {
             return (
                 <div>
-                    <InputLabel htmlFor={"key2"}>Key2</InputLabel>
+                    <InputLabel htmlFor={"key2"}>Filtre 2</InputLabel>
                     <Input type="text" name="key2" value={formData.key2} onChange={handleChange}/>
                 </div>
             )
@@ -101,9 +101,7 @@ export default function HorizontalNonLinearStepper() {
         }
         const newActiveStep =
             isLastStep() && !allStepsCompleted()
-                ? // It's the last step, but not all steps have been completed,
-                  // find the first step that has been completed
-                steps.findIndex((_step, i) => !(i in completed))
+                ? steps.findIndex((_step, i) => !(i in completed))
                 : activeStep + 1;
         setActiveStep(newActiveStep);
     };
@@ -141,6 +139,9 @@ export default function HorizontalNonLinearStepper() {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <Typography variant="h3" mb="50px">
+                Ajout d'un dataset
+            </Typography>
             <Stepper nonLinear activeStep={activeStep}>
                 {steps.map((label, index) => (
                     <Step key={label} completed={completed[index]}>
@@ -156,15 +157,16 @@ export default function HorizontalNonLinearStepper() {
                 {allStepsCompleted() ? (
                     <React.Fragment>
                         <Typography sx={{mt: 2, mb: 1}}>
-                            Toutes les étapes sont terminées. Vous pouvez maintenant voir le résultat.
+                            Toutes les étapes sont terminées.
+                            Vous pouvez maintenant envoyer le fomulaire.
                         </Typography>
-                        <Typography>
-                            yo {formData.url} ici
-                        </Typography>
+                        {/*<Typography>*/}
+                        {/*    {formData.url}*/}
+                        {/*</Typography>*/}
                         <Box sx={{display: 'flex', flexDirection: 'row', pt: 2}}>
                             <Box sx={{flex: '1 1 auto'}}/>
                             <form name={"save"} onSubmit={handleSubmit}>
-                                <Button type="submit">Submit</Button>
+                                <Button type="submit">Envoyer</Button>
                             </form>
                             <Button onClick={handleReset}>Reset</Button>
                         </Box>
@@ -184,7 +186,7 @@ export default function HorizontalNonLinearStepper() {
                                 onClick={handleBack}
                                 sx={{ mr: 1 }}
                             >
-                                Back
+                                Retour
                             </Button>
                             <Box sx={{ flex: '1 1 auto' }} />
                             {/*<Button onClick={handleNext} sx={{ mr: 1 }}>*/}
@@ -198,8 +200,8 @@ export default function HorizontalNonLinearStepper() {
                                 ) : (
                                     <Button onClick={handleComplete}>
                                         {completedSteps() === totalSteps() - 1
-                                            ? 'Finish'
-                                            : 'Complete Step'}
+                                            ? 'Terminer'
+                                            : 'Completer l\'étape'}
                                     </Button>
                                 ))}
                         </Box>
