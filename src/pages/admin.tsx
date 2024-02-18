@@ -134,13 +134,6 @@ export default function HorizontalNonLinearStepper() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleStep = (step: number) => () => {
-        if (checkIfFormIsValid() === false) {
-            return false;
-        }
-        setActiveStep(step);
-    };
-
     const handleComplete = () => {
         if (!checkIfFormIsValid()) {
             console.log("form is not valid");
